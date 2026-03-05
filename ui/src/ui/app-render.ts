@@ -257,6 +257,14 @@ export function renderApp(state: AppViewState) {
             <span>${t("common.health")}</span>
             <span class="mono">${state.connected ? t("common.ok") : t("common.offline")}</span>
           </div>
+          <button
+            class="pill"
+            style="cursor:pointer"
+            @click=${() => void state.handleToggleCompanyDesk()}
+            title="Open Company Desk panel"
+          >
+            <span>Company Desk</span>
+          </button>
           ${renderThemeToggle(state)}
         </div>
       </header>

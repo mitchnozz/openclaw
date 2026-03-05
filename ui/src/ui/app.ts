@@ -615,6 +615,26 @@ export class OpenClawApp extends LitElement {
     this.applySettings({ ...this.settings, splitRatio: newRatio });
   }
 
+  async handleToggleCompanyDesk() {
+    if (!this.connected || !this.client) {
+      this.lastError = "Connect to gateway first, then open Company Desk.";
+      return;
+    }
+    try {
+      const base = (this.basePath || "").replace(/\/$/, "");
+      const url = `${base}/company-desk-thin-client.js`;
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) {
+        throw new Error(`Failed to load ${url} (${res.status})`);
+      }
+      const script = await res.text();
+      // Execute in the dashboard context so openclaw-app/client are available.
+      Function(script)();
+    } catch (err) {
+      this.lastError = `Company Desk load failed: ${String(err)}`;
+    }
+  }
+
   render() {
     return renderApp(this as unknown as AppViewState);
   }
